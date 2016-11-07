@@ -5,7 +5,7 @@ Basic Calculator created with Visual Studio C#
 ![Image of Calculator](https://cloud.githubusercontent.com/assets/16367862/20079044/f3365984-a510-11e6-80b0-81e7a6da4507.png)
 
 ## Introduction
-This is a small project I undertook to familiarize myself with the functionality of Visual Studio IDE. This is a simply calculator for performing basic operations.
+This is a small project I undertook to familiarize myself with the functionality of Visual Studio IDE and C#. This is a simply calculator for performing basic arithmetic operations. Although the GUI provides buttons for all necessary operations, the program receives input via keyboard(Numpad) as well.
 
 ## Supported Types
 Signed
