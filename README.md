@@ -2,7 +2,7 @@
 Basic Calculator created with Visual Studio C#
 
 
-![Image of Calculator](https://cloud.githubusercontent.com/assets/16367862/20078084/1f6c6aba-a50d-11e6-9c2d-8b15a53cdb21.png)
+![Image of Calculator](https://cloud.githubusercontent.com/assets/16367862/20079044/f3365984-a510-11e6-80b0-81e7a6da4507.png)
 
 ## Introduction
 This is a small project I undertook to familiarize myself with the functionality of Visual Studio IDE. This is a simply calculator for performing basic operations.
