@@ -12,324 +12,615 @@ namespace WindowsFormsApplication1
 {
     public partial class basicCalculator : Form
     {
+        private class Operation
+        {
+            public double number;
+            public int operation;
+
+            public Operation( double number , int operation )
+            {
+                this.number = number;
+                this.operation = operation;
+            }
+        }
+
+        // Indicates that the display content should be cleared
+        // Next time user enters a value, the display will reset and print the new value
         bool newLine = true;
-        bool multiOperation = false;
-        double currentNum = 0;
-        int operation = 0;
+
+        // Indicates what type of input the calculator processed last time
+        // 0 - number
+        // 1 - operation
+        int lastInput = 0;
+
+        // Data structure that stores queued operations
+        List<Operation> operations = new List<Operation>();
+
+        // Save cache of last operation. 
+        // Repeatedly pressing Enter or Clicking Equal will perform the cached operation
+        Operation lastOperation = null;
 
         public basicCalculator()
         {
             InitializeComponent();
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad7
+         * */
         private void num7_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if(newLine)
             {
-                output.Text = "7";
+                display("7");
                 newLine = false;
             }
             else
             {
-                output.Text += 7;
+                addToDisplay("7");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad8
+         * */
         private void num8_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "8";
+                display("8");
                 newLine = false;
             }
             else
             {
-                output.Text += 8;
+                addToDisplay("8");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad9
+         * */
         private void num9_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "9";
+                display("9");
                 newLine = false;
             }
             else
             {
-                output.Text += 9;
+                addToDisplay("9");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad4
+         * */
         private void num4_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "4";
+                display("4");
                 newLine = false;
             }
             else
             {
-                output.Text += 4;
+                addToDisplay("4");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad5
+         * */
         private void num5_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "5";
+                display("5");
                 newLine = false;
             }
             else
             {
-                output.Text += 5;
+                addToDisplay("5");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad6
+         * */
         private void num6_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "6";
+                display("6");
                 newLine = false;
             }
             else
             {
-                output.Text += 6;
+                addToDisplay("6");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad1
+         * */
         private void num1_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "1";
+                display("1");
                 newLine = false;
             }
             else
             {
-                output.Text += 1;
+                addToDisplay("1");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad2
+         * */
         private void num2_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "2";
+                display("2");
                 newLine = false;
             }
             else
             {
-                output.Text += 2;
+                addToDisplay("2");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad3
+         * */
         private void num3_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (newLine)
             {
-                output.Text = "3";
+                display("3");
                 newLine = false;
             }
             else
             {
-                output.Text += 3;
+                addToDisplay("3");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Numpad0
+         * */
         private void num0_Click(object sender, EventArgs e)
         {
-            if (newLine && output.Text == "0" )
+            lastInput = 0;
+
+            // If user entered 0 while the calculator display is already showing 0,
+            //  then do nothing.
+            if (newLine && isOutputDisplayEmpty() )
             {
                 newLine = true;
             }
+            // If the display has another value and it is being discarded, then print 0
             else if( newLine )
             {
-                output.Text = "0";
+                display("0");
             }
+            // If the existing display has a non-zero value and it is not being discarded,
+            //  then add 0 to the existing value  
             else
             {
-                output.Text += 0;
+                addToDisplay("0");
                 newLine = false;
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks C button
+         * */
         private void buttonC_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
             previousEntryOutput.Text = "";
-            output.Text = "0";
-            operation = 0;
-            currentNum = 0;
+            clearDisplay();
             newLine = true;
+            lastOperation = null;
+            operations.Clear();
         }
 
+        /**
+         *  Function that handles event created when user clicks CE button
+         * */
         private void buttonClearEntry_Click(object sender, EventArgs e)
         {
-            output.Text = "0";
+            lastInput = 0;
+            clearDisplay();
             newLine = true;
         }
 
+        /**
+         *  Function that handles event created when user clicks Backspace button
+         * */
         private void buttonBackspace_Click(object sender, EventArgs e)
         {
+            lastInput = 0;
+
             if (output.Text.Length == 1)
             {
                 newLine = true;
-                output.Text = "0";
+                clearDisplay();
             }
             else
             {
-                output.Text = output.Text.Remove(output.Text.Length - 1, 1);
+                display( output.Text.Remove(output.Text.Length - 1, 1) );
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Sign Change button
+         * */
         private void buttonSign_Click(object sender, EventArgs e)
         {
-            if (output.Text[0] != '-' && output.Text != "0")
+            lastInput = 0;
+
+            if (isOutputDisplayEmpty())
             {
-                string text = output.Text;
-                output.Text = '-' + text;
+                ;
             }
             else if (output.Text[0] == '-')
             {
-                output.Text = output.Text.Remove(0, 1);
+                display(output.Text.Remove(0, 1));
+            }
+            else
+            {
+                display("-" + output.Text);
             }
         }
 
+        /**
+         *  Function that handles event created when user clicks Decimal button
+         * */
         private void buttonDot_Click(object sender, EventArgs e)
         {
-            if( newLine == true )
+            lastInput = 0;
+
+            if ( newLine == true )
             {
-                output.Text = "0.";
+                display("0.");
             }
             else if (!output.Text.Contains("."))
             {
-                output.Text += '.';
+                addToDisplay(".");
             }
 
             newLine = false;
         }
 
+        /**
+         *  Function that handles event created when user clicks Subtract button
+         * */
         private void buttonMinus_Click(object sender, EventArgs e)
         {
-            previousEntryOutput.Text += (output.Text + " - ");
-
-            if (multiOperation)
+            // If user pressed any of the operation button more than once in a row
+            // Ignore that input
+            if (lastInput == 1 && operations[operations.Count - 1].operation == 1)
             {
-                calculate();
-                output.Text = Convert.ToString(currentNum);
+                return;
+            }
+            else if( lastInput == 1 )
+            {
+                operations.RemoveAt(operations.Count - 1);
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 1));
+                displayPreviousEntries();
             }
             else
             {
-                currentNum = Convert.ToDouble(output.Text);
-                multiOperation = true;
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 1));
+                displayPreviousEntries();
+                calculate();
             }
 
-            operation = 1;
+            lastInput = 1;
             newLine = true;
         }
 
+        /**
+         *  Function that handles event created when user clicks Add button
+         * */
         private void buttonPlus_Click(object sender, EventArgs e)
         {
-            previousEntryOutput.Text += (output.Text + " + ");
-
-            if (multiOperation)
+            // If user pressed any of the operation button more than once in a row
+            // Ignore that input
+            if (lastInput == 1 && operations[operations.Count - 1].operation == 2)
             {
-                calculate();
-                output.Text = Convert.ToString(currentNum);
+                return;
+            }
+            else if (lastInput == 1)
+            {
+                operations.RemoveAt(operations.Count - 1);
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 2));
+                displayPreviousEntries();
             }
             else
             {
-                currentNum = Convert.ToDouble(output.Text);
-                multiOperation = true;
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 2));
+                displayPreviousEntries();
+                calculate();
             }
 
-            operation = 2;
+            lastInput = 1;
             newLine = true;
         }
 
+        /**
+         *  Function that handles event created when user clicks Multiply button
+         * */
         private void buttonMultiply_Click(object sender, EventArgs e)
         {
-            previousEntryOutput.Text += (output.Text + " * ");
-
-            if (multiOperation)
+            // If user pressed any of the operation button more than once in a row
+            // Ignore that input
+            if (lastInput == 1 && operations[operations.Count - 1].operation == 3)
             {
-                calculate();
-                output.Text = Convert.ToString(currentNum);
+                return;
+            }
+            else if (lastInput == 1)
+            {
+                operations.RemoveAt(operations.Count - 1);
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 3));
+                displayPreviousEntries();
             }
             else
             {
-                currentNum = Convert.ToDouble(output.Text);
-                multiOperation = true;
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 3));
+                displayPreviousEntries();
+                calculate();
             }
 
-            operation = 3;
+            lastInput = 1;
             newLine = true;
         }
 
+        /**
+         *  Function that handles event created when user clicks Divide button
+         * */
         private void buttonDivide_Click(object sender, EventArgs e)
         {
-            previousEntryOutput.Text += (output.Text + " / ");
-
-            if (multiOperation)
+            // If user pressed any of the operation button more than once in a row
+            // Ignore that input
+            if (lastInput == 1 && operations[operations.Count - 1].operation == 4)
             {
-                calculate();
-                output.Text = Convert.ToString(currentNum);
+                return;
+            }
+            else if (lastInput == 1)
+            {
+                operations.RemoveAt(operations.Count - 1);
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 4));
+                displayPreviousEntries();
             }
             else
             {
-                currentNum = Convert.ToDouble(output.Text);
-                multiOperation = true;
+                operations.Add(new Operation(Convert.ToDouble(output.Text), 4));
+                displayPreviousEntries();
+                calculate();
             }
 
-            operation = 4;
+            lastInput = 1;
             newLine = true;
         }
 
+        /**
+         *  Function that handles event created when user clicks Equals button
+         * */
         private void buttonEquals_Click(object sender, EventArgs e)
         {
-            if( operation > 0 )
+            // If there are any queued operations, add the last operand and perform calculation. Clear the operations queue.
+            if (operations.Count > 0)
             {
+                // Cache last operation
+                lastOperation = new Operation(Convert.ToDouble(output.Text), operations[operations.Count - 1].operation);
+                operations.Add(lastOperation);
                 calculate();
-
-                output.Text = Convert.ToString(currentNum);
+                operations.Clear();
+                clearPreviousEntryDisplay();
             }
-
-            previousEntryOutput.Text = "";
-            multiOperation = false;
-            operation = 0;
-            newLine = true;
-        }
-
-        void calculate()
-        {
-            switch (operation)
+            // If there is no queued operations, but last operation has cache, then perform the last operation.
+            else if ( lastOperation != null )
             {
-                case 1:
-                    currentNum = currentNum - Convert.ToDouble(output.Text);
-                    break;
-                case 2:
-                    currentNum = currentNum + Convert.ToDouble(output.Text);
-                    break;
-                case 3:
-                    currentNum = currentNum * Convert.ToDouble(output.Text);
-                    break;
-                case 4:
-                    currentNum = currentNum / Convert.ToDouble(output.Text);
-                    break;
+                double value = Convert.ToDouble(output.Text);
+
+                switch( lastOperation.operation )
+                {
+                    case 1:
+                        output.Text = Convert.ToString(value - lastOperation.number);
+                        break;
+                    case 2:
+                        output.Text = Convert.ToString(value + lastOperation.number);
+                        break;
+                    case 3:
+                        output.Text = Convert.ToString(value * lastOperation.number);
+                        break;
+                    case 4:
+                        output.Text = Convert.ToString(value / lastOperation.number);
+                        break;
+                }
+            }
+            // Do nothing if above 2 conditions aren't met.
+            else
+            {
+                ;
+            }
+
+            newLine = true;
+            lastInput = 0;
+        }
+
+        /**
+         *  Function that performs calculation based on the value of operation and currentNum
+         * */
+        private void calculate()
+        {
+            // Requires at least 2 operands to perform calculation
+            if( operations.Count < 2 )
+            {
+                return;
+            }
+            else
+            {
+                double newValue = operations[0].number;
+
+                for ( int i = 0; i < operations.Count - 1; i++ )
+                {
+                    switch( operations[i].operation )
+                    {
+                        case 1:
+                            newValue = newValue - operations[i + 1].number;
+                            break;
+                        case 2:
+                            newValue = newValue + operations[i + 1].number;
+                            break;
+                        case 3:
+                            newValue = newValue * operations[i + 1].number;
+                            break;
+                        case 4:
+                            newValue = newValue / operations[i + 1].number;
+                            break;
+                    }
+                }
+
+                display(Convert.ToString(newValue));
             }
         }
 
+        /**
+         *  Function that clears the contents of the Previous Entry Display Window
+         * */
+        private void clearPreviousEntryDisplay()
+        {
+            previousEntryOutput.Text = "";
+        }
+
+        /**
+         *  Function that set new literal to previous entry Display window.
+         *  @param literal string literal to add to the display
+         * */
+        private void displayPreviousEntries()
+        {
+            string newLiteral = "";
+
+            for( int i = 0; i < operations.Count; i++ )
+            {
+                newLiteral += operations[i].number;
+                
+                switch( operations[i].operation )
+                {
+                    case 1:
+                        newLiteral += "-";
+                        break;
+                    case 2:
+                        newLiteral += "+";
+                        break;
+                    case 3:
+                        newLiteral += "*";
+                        break;
+                    case 4:
+                        newLiteral += "/";
+                        break;
+                }
+            }
+
+            if( newLiteral.Length > 62 )
+            {
+                previousEntryOutput.Text = newLiteral.Remove(62);
+            }
+            else
+            {
+                previousEntryOutput.Text = newLiteral;
+            }
+        }
+
+        /**
+         *  Function that changes the display of calculator to the given string literal.
+         *  @param toDisplay String literal to display on the screen
+         * */
+        private void display( string toDisplay )
+        {
+            if( toDisplay.Length > 16 )
+            {
+                output.Text = toDisplay.Remove(16);
+            }
+            else
+            {
+                output.Text = toDisplay;
+            }
+        }
+
+        /**
+         *  Function that displays the given string literal in addition to current displayed content
+         *  @param toDisplay String literal to add to the display screen
+         * */
+        private void addToDisplay(string toAdd)
+        {
+            string newString = output.Text + toAdd;
+
+            if (newString.Length > 16)
+            {
+                output.Text = newString.Remove(16);
+            }
+            else
+            {
+                output.Text = newString;
+            }
+        }
+
+        /**
+         *  Function that clears the display contents
+         * */
+        private void clearDisplay()
+        {
+            output.Text = "0";
+        }
+
+        /**
+         *  Output display is considered "empty" if it is only diplaying 0
+         *  @return isEmpty true if the output display is only showing 0
+         * */
+        private bool isOutputDisplayEmpty()
+        {
+            return output.Text == "0";
+        }
+
+        /**
+         *  Override ProcessCmdKey so that the form receives keyboard input before any other components
+         *  and handle the event. 
+         * */
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             switch( keyData )
