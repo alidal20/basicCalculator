@@ -8,9 +8,9 @@ Basic Calculator created with Visual Studio C#
 This is a small project I undertook to familiarize myself with the functionality of Visual Studio IDE. This is a simply calculator for performing basic operations.
 
 ## Supported Types
+Signed
 - Integers
 - Decimals
-- Signed / Unsigned
 
 ## Main Operations
 - Addition
