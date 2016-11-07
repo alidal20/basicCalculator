@@ -246,7 +246,7 @@
             this.buttonSign.Name = "buttonSign";
             this.buttonSign.Size = new System.Drawing.Size(85, 85);
             this.buttonSign.TabIndex = 17;
-            this.buttonSign.Text = "-\r\n+";
+            this.buttonSign.Text = "+\r\n-";
             this.buttonSign.UseVisualStyleBackColor = true;
             this.buttonSign.Click += new System.EventHandler(this.buttonSign_Click);
             // 
@@ -285,6 +285,7 @@
             // 
             // previousEntryOutput
             // 
+            this.previousEntryOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.previousEntryOutput.Location = new System.Drawing.Point(25, 15);
             this.previousEntryOutput.Name = "previousEntryOutput";
             this.previousEntryOutput.Size = new System.Drawing.Size(448, 25);
