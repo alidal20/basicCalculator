@@ -18,8 +18,10 @@ Signed
 - Multiplication
 - Division
 
-## Extra Operations
+## Extra Operations and Features
 - C: Clears everything
 - CE: Clears recent input
-- Backspace: Remove last digit of current input
-- Repeat Operation: Click Equals button or press Enter after performing some operations to repeat the last operation
+- Backspace: Remove the last digit of current input
+- Repeat Operations: Click Equals button or press the Enter key after performing some operations to repeat the last operation
+- Chained Operations: Allows multiple operations (Does not check precedence - i.e. operations are always sequential)
+- Diplay Chained Operations: Display operation input that user provides before clicking Equals or pressing the Enter key
