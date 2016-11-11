@@ -485,7 +485,7 @@ namespace WindowsFormsApplication1
         /**
          *  Function that performs calculation based on the value of operation and currentNum
          * */
-        private void calculate()
+        private async void calculate()
         {
             // Requires at least 2 operands to perform calculation
             if( operations.Count < 2 )
@@ -510,6 +510,14 @@ namespace WindowsFormsApplication1
                             newValue = newValue * operations[i + 1].number;
                             break;
                         case 4:
+                            if( operations[i + 1].number == 0 )
+                            {
+                                display("Division By Zero");
+                                await Task.Delay( 1500 );
+                                buttonC.PerformClick();
+                                return;
+                            }
+
                             newValue = newValue / operations[i + 1].number;
                             break;
                     }
@@ -542,16 +550,16 @@ namespace WindowsFormsApplication1
                 switch( operations[i].operation )
                 {
                     case 1:
-                        newLiteral += "-";
+                        newLiteral += " - ";
                         break;
                     case 2:
-                        newLiteral += "+";
+                        newLiteral += " + ";
                         break;
                     case 3:
-                        newLiteral += "*";
+                        newLiteral += " * ";
                         break;
                     case 4:
-                        newLiteral += "/";
+                        newLiteral += " / ";
                         break;
                 }
             }
